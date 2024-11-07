@@ -32,7 +32,7 @@ module mk_portfolio (T: real) : portfolio with t = T.t = {
     let p = n + 1
     let fi (x: [n]t): [p]t =
       ([
-       -- expected_return >= target_return          
+       -- expected_return >= target_return
        target_return T.- (expected_return x mus)
        ]
         ++
@@ -53,7 +53,7 @@ module mk_portfolio (T: real) : portfolio with t = T.t = {
     let p = n + 1
     let fi (x: [n]t): [p]t =
       ([
-       -- risk <= target_risk          
+       -- risk <= target_risk
        target_risk T.+ (expected_risk x covs)
        ]
         ++
@@ -78,7 +78,7 @@ module mk_portfolio (T: real) : portfolio with t = T.t = {
           -- expected_esg >= target_esg
           target_esg T.- expected_esg
           ,
-          -- expected_return >= target_return          
+          -- expected_return >= target_return
           target_return T.- (expected_return x mus)
           ]
            ++

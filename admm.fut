@@ -89,7 +89,7 @@ def i_j_to_index_colwise_diag i j (n: i64) : i64 =
 def cholesky [n] (A: [n][n]f64) : [n][n]f64 =
   let L = flat_cho A
   --   in map (\i ->
-  --     map (\j -> 
+  --     map (\j ->
   --         if j >= i then 0f64 else L[i_j_to_index_colwise_diag i j n]
   --     ) (iota n)
   --   ) (iota n)
@@ -171,8 +171,8 @@ entry flat_cho_bench [n] (A: [n][n]f64) =
 --     for _ in range(max_iter):
 --         x_prev = x.copy()
 --         x = update_x(x, z, u)
---         z = update_z(x, u)    
---         u = update_u(x, z, u) 
+--         z = update_z(x, u)
+--         u = update_u(x, z, u)
 
 --         if convergence_criterion(x, x_prev):
 --             break

@@ -262,7 +262,7 @@ module mk_linear (T: real) : linear with t = T.t = {
   --         let Ljj = L[a:b]
   --         let L[b] = T.sqrt (copy (A[j,j] T.- linalg.dotprod Ljj Ljj))
   --         let is = j+1..<n
-  --         let vals = map (\i -> 
+  --         let vals = map (\i ->
   --             let c = tri_num i
   --             let d = c + j
   --             let l = b - a
@@ -296,7 +296,7 @@ module mk_linear (T: real) : linear with t = T.t = {
 
   -- def cholesky [n] (A:[n][n]t): [n][n]t =
   --     let L = cholesky_flat A
-  --     in map (\i -> map (\j -> 
+  --     in map (\i -> map (\j ->
   --         if i < j then (T.f64 0.0) else L[tri_num i + j]
   --     ) (0..<n)) (0..<n)
 

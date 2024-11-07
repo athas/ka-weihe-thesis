@@ -69,11 +69,11 @@ entry test_least_squares [n] [m] (A: [n][m]f64) (b: [n]f64) : bool =
 -- [4.0, 5.0, 6.0]] [1.0, 2.0]}
 -- output { true }
 
--- def line_search [n] (f        : [n]t -> t) 
---                     (f_grad   : [n]t     ) 
---                     (x        : [n]t     ) 
---                     (d        : [n]t     ) 
---                     (alpha    : t        ) 
+-- def line_search [n] (f        : [n]t -> t)
+--                     (f_grad   : [n]t     )
+--                     (x        : [n]t     )
+--                     (d        : [n]t     )
+--                     (alpha    : t        )
 --                     (beta     : t        )
 --                     (max_iter : i64      ): t =
 
@@ -102,10 +102,10 @@ entry test_line_search =
 -- entry test_build_kkt_matrix = mod.build_kkt_matrix
 -- -- ==
 -- -- entry: test_build_kkt_matrix
--- -- input { [[1.0, 2.0], [3.0, 4.0]] [[1.0, 2.0], [3.0, 4.0]]} 
+-- -- input { [[1.0, 2.0], [3.0, 4.0]] [[1.0, 2.0], [3.0, 4.0]]}
 -- -- output { [[1.0, 2.0, 1.0, 3.0], [3.0, 4.0, 2.0, 4.0], [1.0, 2.0, 0.0, 0.0], [3.0, 4.0, 0.0, 0.0]] }
 
--- entry test_compute_newton_step = 
+-- entry test_compute_newton_step =
 --   let hessian = [[1.0, 2.0], [3.0, 4.0]]
 --   let grad = [1.0, 2.0]
 --   let A = [[1.0, 2.0], [3.0, 4.0]]
@@ -153,10 +153,10 @@ def main () =
     let expected_esg = linalg.dotprod x esg_scores
     -- constraints
     in ([
-        -- -- expected_return >= 0.07           
+        -- -- expected_return >= 0.07
         exp - expected_return
         ,
-        -- -- expected esg <= 0.8   
+        -- -- expected esg <= 0.8
         0.8 - expected_esg
         ]
          ++
@@ -179,6 +179,6 @@ def main () =
 
 -- Known compiler limitation encountered.  Sorry.
 -- Revise your program or try a different Futhark compiler.
--- Cannot handle un-sliceable allocation size: (((thread; virtualise; 
+-- Cannot handle un-sliceable allocation size: (((thread; virtualise;
 -- groups=num_groups_78798; groupsize=segmap_group_size_78797), [phys_tid_78802]), bytes_94637, )
 -- Likely cause: irregular nested operations inside parallel constructs.

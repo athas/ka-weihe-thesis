@@ -67,16 +67,16 @@ def h [n] (w: [n]f64) (mu: [n]f64) (esg: [n]f64) =
   let expected_esg = dotprod w esg
   -- constraints
   in [
-     -- sum(w) <= 1.00005                               
+     -- sum(w) <= 1.00005
      w_sum - 1.0 - slack
      ,
-     -- sum(w) >= 0.99995           
+     -- sum(w) >= 0.99995
      1.0 - w_sum - slack
      ,
-     -- expected return >= 0.07           
+     -- expected return >= 0.07
      0.07 - expected_return
      ,
-     -- expected esg <= 0.8   
+     -- expected esg <= 0.8
      0.8 - expected_esg
      ]
      ++

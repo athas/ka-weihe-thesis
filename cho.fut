@@ -38,13 +38,13 @@ def cholesky [n] (A: *[n][n]f64) : [n][n]f64 =
 --             sumval = Lji @ Ljj
 --             val = (A[i, j] - sumval) / L[idx(j, j)]
 --             vals.append(val)
---             # L[idx(i, j)] 
+--             # L[idx(i, j)]
 --         indices = []
 --         for i in range(j+1, n):
 --             indices.append(idx(i, j))
 --         print(indices)
 --         L[indices] = vals
---             # L[idx(i, j)] 
+--             # L[idx(i, j)]
 --     # Last diagonal element
 --     Ljj = L[idx(n-1, 0):idx(n-1, n-1)]  # Pre-compute for multiple uses
 --     L[idx(n-1, n-1)] = np.sqrt(A[n-1, n-1] - np.sum(Ljj**2))

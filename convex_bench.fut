@@ -14,7 +14,7 @@ entry bench_newtons [n] (Sigma: [n][n]f64) (mu: [n]f64) =
   let x0 = replicate n 0.0
   in convex.newtons_method g h x0 1e-8 1000
 
--- == 
+-- ==
 -- entry: bench_newtons
 -- input @ data/2d_100x100_1d_100f64
 -- input @ data/2d_500x500_1d_500f64
@@ -31,7 +31,7 @@ entry bench_newtons_ls [n] (Sigma: [n][n]f64) (mu: [n]f64) =
   let f x = lambda * linalg.dotprod mu x - linalg.dotprod x (linalg.matvecmul_row Sigma x)
   in convex.newtons_method_ls f g h x0 1e-8 0.3 0.5 1000 10
 
--- == 
+-- ==
 -- entry: bench_newtons_ls
 -- input @ data/2d_100x100_1d_100f64
 -- input @ data/2d_500x500_1d_500f64
@@ -42,13 +42,13 @@ entry bench_newtons_ls [n] (Sigma: [n][n]f64) (mu: [n]f64) =
 -- entry bench_newtons3 [n] (Sigma: [n][n]f64) (mu: [n]f64) =
 --     let Sigma = linalg.matmul Sigma (transpose Sigma)
 --     let lambda = 0.5
---     let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu) 
+--     let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu)
 --     let h _ = map (map (* 2.0)) Sigma
 --     let x0 =  replicate n 0.0
 --     let f x = lambda * linalg.dotprod mu x - linalg.dotprod x (linalg.matvecmul_row Sigma x)
 --     in convex.newtons_method3 f g h x0 1e-8 0.3 0.5 1000 10
 
--- == 
+-- ==
 -- entry: bench_newtons3
 -- input @ data/2d_100x100_1d_100f64
 -- input @ data/2d_500x500_1d_500f64
@@ -111,7 +111,7 @@ entry bench_newtons_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) =
           Sigmas
           mus
 
--- == 
+-- ==
 -- entry: bench_newtons_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5f64
 -- input @ data/2d_1000000x10x10_1d_1000000x10f64
@@ -132,7 +132,7 @@ entry bench_newtons2_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) =
           Sigmas
           mus
 
--- == 
+-- ==
 -- entry: bench_newtons2_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5f64
 -- input @ data/2d_1000000x10x10_1d_1000000x10f64
@@ -144,15 +144,15 @@ entry bench_newtons2_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) =
 -- entry bench_newtons3_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) =
 --     let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
 --     let lambda = 0.5
---     in map2 (\Sigma mu -> 
+--     in map2 (\Sigma mu ->
 --         let f x = lambda * linalg.dotprod mu x - linalg.dotprod x (linalg.matvecmul_row Sigma x)
---         let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu) 
+--         let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu)
 --         let h _ = map (map (* 2.0)) Sigma
 --         let x0 =  replicate n 0.0
 --         in convex.newtons_method3 f g h x0 1e-8 0.3 0.5 1000 10
 --     ) Sigmas mus
 
--- == 
+-- ==
 -- entry: bench_newtons3_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5f64
 -- input @ data/2d_1000000x10x10_1d_1000000x10f64
@@ -232,7 +232,7 @@ entry bench_newtoneq [n] (Sigma: [n][n]f64) =
   let b = [1]
   in convex.newton_equality g h A b x0 1e-8 1000
 
--- == 
+-- ==
 -- entry: bench_newtoneq
 -- input @ data/2d_100x100f64
 -- input @ data/2d_500x500f64
@@ -282,7 +282,7 @@ entry bench_newtoneq_batched [n] (Sigmas: [][n][n]f64) =
              in convex.newton_equality g h A b x0 1e-8 1000)
          Sigmas
 
--- == 
+-- ==
 -- entry: bench_newtoneq_batched
 -- input @ data/2d_1000000x5x5f64
 -- input @ data/2d_1000000x10x10f64
@@ -460,7 +460,7 @@ entry admm_bench [n] (Sigma: [n][n]f64) (mu: [n]f64) (esg_scores: [n]f64) =
 -- convex_bench.fut:barrier_bench_jvp (no tuning file):
 -- data/2x_100x100_1d_100_1d_100f64:             116995μs (95% CI: [  115774.5,   118254.9])
 -- data/2x_500x500_1d_500_1d_500f64:           17840563μs (95% CI: [17840238.1, 17840902.3])
--- data/2x_1000x1000_1d_1000_1d_1000f64:     
+-- data/2x_1000x1000_1d_1000_1d_1000f64:
 -- Failed to allocate memory in space 'device'.
 -- Attempted allocation:   8001536000 bytes
 -- Currently allocated:   40128633672 bytes
@@ -534,7 +534,7 @@ entry barrier_bench_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_score
           mus
           esg_scoress
 
--- == 
+-- ==
 -- entry: barrier_bench_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5_1d_1000000x5f64
 -- input @ data/2d_1000000x10x10_1d_1000000x10_1d_1000000x10f64
@@ -569,7 +569,7 @@ entry barrier_bench_jvp_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_s
           mus
           esg_scoress
 
--- == 
+-- ==
 -- entry: barrier_bench_jvp_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5_1d_1000000x5f64
 -- input @ data/2d_1000000x10x10_1d_1000000x10_1d_1000000x10f64
@@ -604,7 +604,7 @@ entry barrier_bench_vjp_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_s
           mus
           esg_scoress
 
--- == 
+-- ==
 -- entry: barrier_bench_vjp_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5_1d_1000000x5f64
 -- input @ data/2d_1000000x10x10_1d_1000000x10_1d_1000000x10f64
@@ -633,7 +633,7 @@ entry admm_bench_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_scoress:
           mus
           esg_scoress
 
--- == 
+-- ==
 -- entry: admm_bench_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5_1d_1000000x5f64
 -- input @ data/2d_1000000x10x10_1d_1000000x10_1d_1000000x10f64
@@ -673,7 +673,7 @@ entry admm_bench_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_scoress:
 -- data/2d_1000000x10x10_1d_1000000x10_1...:   10113011μs (95% CI: [10015835.5, 10145440.8])
 -- data/2d_100000x20x20_1d_100000x20_1d_...:    4766267μs (95% CI: [ 4763828.4,  4769037.5])
 -- data/2d_10000x50x50_1d_10000x50_1d_10...:   37977384μs (95% CI: [37447457.5, 38238057.4])
--- data/2d_1000x100x100_1d_1000x100_1d_1...:  139446494μs 
+-- data/2d_1000x100x100_1d_1000x100_1d_1...:  139446494μs
 
 -- ADMM CG
 -- convex_bench.fut:admm_bench_batched (no tuning file):
