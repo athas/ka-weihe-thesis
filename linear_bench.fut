@@ -4,8 +4,8 @@ import "lib/github.com/diku-dk/linalg/linalg"
 module linear_f64 = mk_linear f64
 module linalg = mk_linalg f64
 
-
 entry bench_cholesky_outer = linear_f64.cholesky_outer
+
 -- ==
 -- entry: bench_cholesky_outer
 -- input @ data/2d_100x100f64
@@ -15,6 +15,7 @@ entry bench_cholesky_outer = linear_f64.cholesky_outer
 -- input @ data/2d_10000x10000f64
 
 entry bench_cholesky_crout = linear_f64.cholesky_crout
+
 -- ==
 -- entry: bench_cholesky_crout
 -- input @ data/2d_100x100f64
@@ -26,6 +27,7 @@ entry bench_cholesky_crout = linear_f64.cholesky_crout
 -- input @ data/2d_10000x10000f64
 
 entry bench_cholesky_banachiewicz = linear_f64.cholesky_banachiewicz
+
 -- ==
 -- entry: bench_cholesky_banachiewicz
 -- input @ data/2d_100x100f64
@@ -37,6 +39,7 @@ entry bench_cholesky_banachiewicz = linear_f64.cholesky_banachiewicz
 -- input @ data/2d_10000x10000f64
 
 entry bench_cholesky_flat = linear_f64.cholesky_flat
+
 -- ==
 -- entry: bench_cholesky_flat
 -- input @ data/2d_100x100f64
@@ -45,8 +48,8 @@ entry bench_cholesky_flat = linear_f64.cholesky_flat
 -- input @ data/2d_5000x5000f64
 -- input @ data/2d_10000x10000f64
 
-
 entry bench_cholesky_dot = linear_f64.cholesky_dot
+
 -- ==
 -- entry: bench_cholesky_dot
 -- input @ data/2d_100x100f64
@@ -94,7 +97,8 @@ entry bench_cholesky_dot = linear_f64.cholesky_dot
 -- n = 10000, time = 2788463 us
 
 entry bench_cholesky_flat_batched [n] (As: [][n][n]f64) =
-    map (linear_f64.cholesky_flat) As
+  map (linear_f64.cholesky_flat) As
+
 -- ==
 -- entry: bench_cholesky_flat_batched
 -- input @ data/2d_1000000x5x5f64
@@ -105,7 +109,8 @@ entry bench_cholesky_flat_batched [n] (As: [][n][n]f64) =
 -- input @ data/2d_100x500x500f64
 
 entry bench_cholesky_crout_batched [n] (As: [][n][n]f64) =
-    map (linear_f64.cholesky_crout) As
+  map (linear_f64.cholesky_crout) As
+
 -- ==
 -- entry: bench_cholesky_crout_batched
 -- input @ data/2d_1000000x5x5f64
@@ -116,7 +121,8 @@ entry bench_cholesky_crout_batched [n] (As: [][n][n]f64) =
 -- input @ data/2d_100x500x500f64
 
 entry bench_cholesky_banachiewicz_batched [n] (As: [][n][n]f64) =
-    map (linear_f64.cholesky_banachiewicz) As
+  map (linear_f64.cholesky_banachiewicz) As
+
 -- ==
 -- entry: bench_cholesky_banachiewicz_batched
 -- input @ data/2d_1000000x5x5f64
@@ -127,7 +133,8 @@ entry bench_cholesky_banachiewicz_batched [n] (As: [][n][n]f64) =
 -- input @ data/2d_100x500x500f64
 
 entry bench_cholesky_outer_batched [n] (As: [][n][n]f64) =
-    map (linear_f64.cholesky_outer) As
+  map (linear_f64.cholesky_outer) As
+
 -- ==
 -- entry: bench_cholesky_outer_batched
 -- input @ data/2d_1000000x5x5f64
@@ -191,6 +198,7 @@ entry bench_cholesky_outer_batched [n] (As: [][n][n]f64) =
 -- n = 500x500, time = 165973 us
 
 entry bench_lud = linear_f64.lud
+
 -- ==
 -- entry: bench_lud
 -- input @ data/2d_100x100f64
@@ -200,6 +208,7 @@ entry bench_lud = linear_f64.lud
 -- input @ data/2d_10000x10000f64
 
 entry bench_seq_lud = linear_f64.seq_lud
+
 -- ==
 -- entry: bench_seq_lud
 -- input @ data/2d_100x100f64
@@ -209,6 +218,7 @@ entry bench_seq_lud = linear_f64.seq_lud
 -- input @ data/2d_10000x10000f64
 
 entry bench_blocked_lud = linear_f64.blocked_lud
+
 -- ==
 -- entry: bench_blocked_lud
 -- input @ data/2d_100x100f64
@@ -216,7 +226,6 @@ entry bench_blocked_lud = linear_f64.blocked_lud
 -- input @ data/2d_1000x1000f64
 -- input @ data/2d_5000x5000f64
 -- input @ data/2d_10000x10000f64
-
 
 -- linear_bench.fut:bench_lud (using linear_bench.fut.tuning):
 -- data/2d_100x100f64:             1705μs (95% CI: [    1699.1,     1711.3])
@@ -244,7 +253,8 @@ entry bench_blocked_lud = linear_f64.blocked_lud
 -- n = 10000x10000, time = 4905548 us
 
 entry bench_lud_batched [n] (As: [][n][n]f64) =
-    map (linear_f64.lud) As
+  map (linear_f64.lud) As
+
 -- ==
 -- entry: bench_lud_batched
 -- input @ data/2d_1000000x5x5f64
@@ -255,7 +265,8 @@ entry bench_lud_batched [n] (As: [][n][n]f64) =
 -- input @ data/2d_100x500x500f64
 
 entry bench_seq_lud_batched [n] (As: [][n][n]f64) =
-    map (linear_f64.seq_lud) As
+  map (linear_f64.seq_lud) As
+
 -- ==
 -- entry: bench_seq_lud_batched
 -- input @ data/2d_1000000x5x5f64
@@ -266,7 +277,8 @@ entry bench_seq_lud_batched [n] (As: [][n][n]f64) =
 -- input @ data/2d_100x500x500f64
 
 entry bench_blocked_lud_batched [n] (As: [][n][n]f64) =
-    map (linear_f64.blocked_lud) As
+  map (linear_f64.blocked_lud) As
+
 -- ==
 -- entry: bench_blocked_lud_batched
 -- input @ data/2d_1000000x5x5f64
@@ -275,7 +287,6 @@ entry bench_blocked_lud_batched [n] (As: [][n][n]f64) =
 -- input @ data/2d_10000x50x50f64
 -- input @ data/2d_1000x100x100f64
 -- input @ data/2d_100x500x500f64
-
 
 -- linear_bench.fut:bench_lud_batched (no tuning file):
 -- data/2d_1000000x5x5f64:         4237μs (95% CI: [    4234.6,     4239.3])
@@ -310,6 +321,7 @@ entry bench_blocked_lud_batched [n] (As: [][n][n]f64) =
 -- n = 500x500, time = 547019 us
 
 entry bench_cholesky_solveAb = linear_f64.solve_Ab_cholesky_outer
+
 -- ==
 -- entry: bench_cholesky_solveAb
 -- input @ data/2d_100x100_1d_100f64
@@ -319,6 +331,7 @@ entry bench_cholesky_solveAb = linear_f64.solve_Ab_cholesky_outer
 -- input @ data/2d_10000x10000_1d_10000f64
 
 entry bench_seq_cholesky_solveAb = linear_f64.solve_Ab_cholesky_seq
+
 -- ==
 -- entry: bench_seq_cholesky_solveAb
 -- input @ data/2d_100x100_1d_100f64
@@ -328,6 +341,7 @@ entry bench_seq_cholesky_solveAb = linear_f64.solve_Ab_cholesky_seq
 -- input @ data/2d_10000x10000_1d_10000f64
 
 entry bench_lu_solveAb = linear_f64.solve_Ab_lu
+
 -- ==
 -- entry: bench_lu_solveAb
 -- input @ data/2d_100x100_1d_100f64
@@ -337,6 +351,7 @@ entry bench_lu_solveAb = linear_f64.solve_Ab_lu
 -- input @ data/2d_10000x10000_1d_10000f64
 
 entry bench_seq_lu_solveAb = linear_f64.solve_Ab_lu_seq
+
 -- ==
 -- entry: bench_seq_lu_solveAb
 -- input @ data/2d_100x100_1d_100f64
@@ -346,6 +361,7 @@ entry bench_seq_lu_solveAb = linear_f64.solve_Ab_lu_seq
 -- input @ data/2d_10000x10000_1d_10000f64
 
 entry bench_gauss_solveAb = linear_f64.solve_Ab_gauss
+
 -- ==
 -- entry: bench_gauss_solveAb
 -- input @ data/2d_100x100_1d_100f64
@@ -355,6 +371,7 @@ entry bench_gauss_solveAb = linear_f64.solve_Ab_gauss
 -- input @ data/2d_10000x10000_1d_10000f64
 
 entry bench_gauss_np_solveAb = linear_f64.solve_Ab_gauss_np
+
 -- ==
 -- entry: bench_gauss_np_solveAb
 -- input @ data/2d_100x100_1d_100f64
@@ -364,9 +381,10 @@ entry bench_gauss_np_solveAb = linear_f64.solve_Ab_gauss_np
 -- input @ data/2d_10000x10000_1d_10000f64
 
 entry bench_conjugate_gradient [n] (A: [n][n]f64) (b: [n]f64) =
-    -- let A = linalg.matmul A (transpose A)
-    let x0 = replicate n 0.0
-    in linear_f64.solve_Ab_cg A b x0 1e-6 n
+  -- let A = linalg.matmul A (transpose A)
+  let x0 = replicate n 0.0
+  in linear_f64.solve_Ab_cg A b x0 1e-6 n
+
 -- ==
 -- entry: bench_conjugate_gradient
 -- input @ data/2d_100x100_1d_100f64
@@ -375,10 +393,8 @@ entry bench_conjugate_gradient [n] (A: [n][n]f64) (b: [n]f64) =
 -- input @ data/2d_5000x5000_1d_5000f64
 -- input @ data/2d_10000x10000_1d_10000f64
 
-
 -- linear_bench.fut:bench_seq_lu_solveAb (no tuning file):
 -- data/2d_100x100_1d_100f64:           993593μs ⠼ (RSE of mean: 0.0394;    5 runs)
-
 
 -- linear_bench.fut:bench_cholesky_solveAb (no tuning file):
 -- data/2d_100x100_1d_100f64:             4019μs (95% CI: [    4009.4,     4033.0])
@@ -422,8 +438,9 @@ entry bench_conjugate_gradient [n] (A: [n][n]f64) (b: [n]f64) =
 -- n = 5000x5000, time = 595741 us
 -- n = 10000x10000, time = 4100007 us
 
-entry bench_cholesky_solveAb_batched = 
-    map2 (linear_f64.solve_Ab_cholesky_outer)
+entry bench_cholesky_solveAb_batched =
+  map2 (linear_f64.solve_Ab_cholesky_outer)
+
 -- == 
 -- entry: bench_cholesky_solveAb_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5f64
@@ -433,8 +450,9 @@ entry bench_cholesky_solveAb_batched =
 -- input @ data/2d_1000x100x100_1d_1000x100f64
 -- input @ data/2d_100x500x500_1d_100x500f64
 
-entry bench_seq_cholesky_solveAb_batched = 
-    map2 (linear_f64.solve_Ab_cholesky_seq)
+entry bench_seq_cholesky_solveAb_batched =
+  map2 (linear_f64.solve_Ab_cholesky_seq)
+
 -- == 
 -- entry: bench_seq_cholesky_solveAb_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5f64
@@ -444,8 +462,9 @@ entry bench_seq_cholesky_solveAb_batched =
 -- input @ data/2d_1000x100x100_1d_1000x100f64
 -- input @ data/2d_100x500x500_1d_100x500f64
 
-entry bench_lu_solveAb_batched = 
-    map2 (linear_f64.solve_Ab_lu)
+entry bench_lu_solveAb_batched =
+  map2 (linear_f64.solve_Ab_lu)
+
 -- == 
 -- entry: bench_lu_solveAb_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5f64
@@ -455,8 +474,9 @@ entry bench_lu_solveAb_batched =
 -- input @ data/2d_1000x100x100_1d_1000x100f64
 -- input @ data/2d_100x500x500_1d_100x500f64
 
-entry bench_seq_lu_solveAb_batched = 
-    map2 (linear_f64.solve_Ab_lu_seq)
+entry bench_seq_lu_solveAb_batched =
+  map2 (linear_f64.solve_Ab_lu_seq)
+
 -- == 
 -- entry: bench_seq_lu_solveAb_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5f64
@@ -466,8 +486,9 @@ entry bench_seq_lu_solveAb_batched =
 -- input @ data/2d_1000x100x100_1d_1000x100f64
 -- input @ data/2d_100x500x500_1d_100x500f64
 
-entry bench_guass_solveAb_batched = 
-    map2 (linear_f64.solve_Ab_gauss)
+entry bench_guass_solveAb_batched =
+  map2 (linear_f64.solve_Ab_gauss)
+
 -- == 
 -- entry: bench_guass_solveAb_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5f64
@@ -477,8 +498,9 @@ entry bench_guass_solveAb_batched =
 -- input @ data/2d_1000x100x100_1d_1000x100f64
 -- input @ data/2d_100x500x500_1d_100x500f64
 
-entry bench_guass_np_solveAb_batched = 
-    map2 (linear_f64.solve_Ab_gauss_np)
+entry bench_guass_np_solveAb_batched =
+  map2 (linear_f64.solve_Ab_gauss_np)
+
 -- == 
 -- entry: bench_guass_np_solveAb_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5f64
@@ -488,10 +510,10 @@ entry bench_guass_np_solveAb_batched =
 -- input @ data/2d_1000x100x100_1d_1000x100f64
 -- input @ data/2d_100x500x500_1d_100x500f64
 
-
 entry bench_conjugate_gradient_batched [n] (As: [][n][n]f64) (bs: [][n]f64) =
-    let x0 = replicate n 0.0
-    in map2 (\A b -> linear_f64.solve_Ab_cg A b x0 1e-6 n) As bs
+  let x0 = replicate n 0.0
+  in map2 (\A b -> linear_f64.solve_Ab_cg A b x0 1e-6 n) As bs
+
 -- == 
 -- entry: bench_conjugate_gradient_batched
 -- input @ data/2d_1000000x5x5_1d_1000000x5f64
@@ -500,7 +522,6 @@ entry bench_conjugate_gradient_batched [n] (As: [][n][n]f64) (bs: [][n]f64) =
 -- input @ data/2d_10000x50x50_1d_10000x50f64
 -- input @ data/2d_1000x100x100_1d_1000x100f64
 -- input @ data/2d_100x500x500_1d_100x500f64
-
 
 -- linear_bench.fut:bench_cholesky_solveAb_batched (no tuning file):
 -- data/2d_1000000x5x5_1d_1000000x5f64:         16490μs (95% CI: [   16485.8,    16494.3])

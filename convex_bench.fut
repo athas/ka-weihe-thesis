@@ -7,12 +7,12 @@ module linalg = mk_linalg f64
 module linear = mk_linear f64
 
 entry bench_newtons [n] (Sigma: [n][n]f64) (mu: [n]f64) =
-    let Sigma = linalg.matmul Sigma (transpose Sigma)
-    let lambda = 0.5
-    let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu) 
-    let h _ = map (map (* 2.0)) Sigma
-    let x0 =  replicate n 0.0
-    in convex.newtons_method g h x0 1e-8 1000
+  let Sigma = linalg.matmul Sigma (transpose Sigma)
+  let lambda = 0.5
+  let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu)
+  let h _ = map (map (* 2.0)) Sigma
+  let x0 = replicate n 0.0
+  in convex.newtons_method g h x0 1e-8 1000
 
 -- == 
 -- entry: bench_newtons
@@ -23,13 +23,13 @@ entry bench_newtons [n] (Sigma: [n][n]f64) (mu: [n]f64) =
 -- input @ data/2d_10000x10000_1d_10000f64
 
 entry bench_newtons_ls [n] (Sigma: [n][n]f64) (mu: [n]f64) =
-    let Sigma = linalg.matmul Sigma (transpose Sigma)
-    let lambda = 0.5
-    let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu) 
-    let h _ = map (map (* 2.0)) Sigma
-    let x0 =  replicate n 0.0
-    let f x = lambda * linalg.dotprod mu x - linalg.dotprod x (linalg.matvecmul_row Sigma x)
-    in convex.newtons_method_ls f g h x0 1e-8 0.3 0.5 1000 10
+  let Sigma = linalg.matmul Sigma (transpose Sigma)
+  let lambda = 0.5
+  let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu)
+  let h _ = map (map (* 2.0)) Sigma
+  let x0 = replicate n 0.0
+  let f x = lambda * linalg.dotprod mu x - linalg.dotprod x (linalg.matvecmul_row Sigma x)
+  in convex.newtons_method_ls f g h x0 1e-8 0.3 0.5 1000 10
 
 -- == 
 -- entry: bench_newtons_ls
@@ -55,7 +55,6 @@ entry bench_newtons_ls [n] (Sigma: [n][n]f64) (mu: [n]f64) =
 -- input @ data/2d_1000x1000_1d_1000f64
 -- input @ data/2d_5000x5000_1d_5000f64
 -- input @ data/2d_10000x10000_1d_10000f64
-
 
 -- ######################
 -- WITH LU
@@ -102,14 +101,15 @@ entry bench_newtons_ls [n] (Sigma: [n][n]f64) (mu: [n]f64) =
 -- data/2d_10000x10000_1d_10000f64:   12538721μs (95% CI: [  12537921,   12539521])
 
 entry bench_newtons_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) =
-    let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
-    let lambda = 0.5
-    in map2 (\Sigma mu -> 
-        let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu) 
-        let h _ = map (map (* 2.0)) Sigma
-        let x0 =  replicate n 0.0
-        in convex.newtons_method g h x0 1e-8 1000
-    ) Sigmas mus
+  let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
+  let lambda = 0.5
+  in map2 (\Sigma mu ->
+              let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu)
+              let h _ = map (map (* 2.0)) Sigma
+              let x0 = replicate n 0.0
+              in convex.newtons_method g h x0 1e-8 1000)
+          Sigmas
+          mus
 
 -- == 
 -- entry: bench_newtons_batched
@@ -121,15 +121,16 @@ entry bench_newtons_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) =
 -- input @ data/2d_100x500x500f64_1d_100x500f64
 
 entry bench_newtons2_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) =
-    let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
-    let lambda = 0.5
-    in map2 (\Sigma mu -> 
-        let f x = lambda * linalg.dotprod mu x - linalg.dotprod x (linalg.matvecmul_row Sigma x)
-        let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu) 
-        let h _ = map (map (* 2.0)) Sigma
-        let x0 =  replicate n 0.0
-        in convex.newtons_method_ls f g h x0 1e-8 0.3 0.5 1000 10
-    ) Sigmas mus
+  let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
+  let lambda = 0.5
+  in map2 (\Sigma mu ->
+              let f x = lambda * linalg.dotprod mu x - linalg.dotprod x (linalg.matvecmul_row Sigma x)
+              let g x = map (* 2.0) (linalg.matvecmul_row Sigma x) |> map2 (*) x |> map2 (+) (map (* lambda) mu)
+              let h _ = map (map (* 2.0)) Sigma
+              let x0 = replicate n 0.0
+              in convex.newtons_method_ls f g h x0 1e-8 0.3 0.5 1000 10)
+          Sigmas
+          mus
 
 -- == 
 -- entry: bench_newtons2_batched
@@ -159,7 +160,6 @@ entry bench_newtons2_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) =
 -- input @ data/2d_10000x50x50_1d_10000x50f64
 -- input @ data/2d_1000x100x100_1d_1000x100f64
 -- input @ data/2d_100x500x500f64_1d_100x500f64
-
 
 -- Seq Cho
 -- convex_bench.fut:bench_newtons_batched (no tuning file):
@@ -224,13 +224,13 @@ entry bench_newtons2_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) =
 -- n = 500, elapsed = 122469816.21 us
 
 entry bench_newtoneq [n] (Sigma: [n][n]f64) =
-    let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
-    let g x = map (*2) (linalg.matvecmul_row Sigma x)
-    let h _ = map (map (*2)) Sigma
-    let x0 = map (/(f64.i64 n)) (replicate n 1)
-    let A = [replicate n 1]
-    let b = [1]
-    in convex.newton_equality g h A b x0 1e-8 1000
+  let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
+  let g x = map (* 2) (linalg.matvecmul_row Sigma x)
+  let h _ = map (map (* 2)) Sigma
+  let x0 = map (/ (f64.i64 n)) (replicate n 1)
+  let A = [replicate n 1]
+  let b = [1]
+  in convex.newton_equality g h A b x0 1e-8 1000
 
 -- == 
 -- entry: bench_newtoneq
@@ -270,17 +270,17 @@ entry bench_newtoneq [n] (Sigma: [n][n]f64) =
 -- n = 1000, elapsed = 12529201.03 us
 
 entry bench_newtoneq_batched [n] (Sigmas: [][n][n]f64) =
-    let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
-    in map (\Sigma ->
-        let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
-        let g x = map (*2) (linalg.matvecmul_row Sigma x)
-        let h _ = map (map (*2)) Sigma
-        let x0 = map (/(f64.i64 n)) (replicate n 1)
-        let A = [replicate n 1]
-        let b = [1]
-        -- in #[sequential]
-        in convex.newton_equality g h A b x0 1e-8 1000
-    ) Sigmas
+  let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
+  in map (\Sigma ->
+             let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
+             let g x = map (* 2) (linalg.matvecmul_row Sigma x)
+             let h _ = map (map (* 2)) Sigma
+             let x0 = map (/ (f64.i64 n)) (replicate n 1)
+             let A = [replicate n 1]
+             let b = [1]
+             -- in #[sequential]
+             in convex.newton_equality g h A b x0 1e-8 1000)
+         Sigmas
 
 -- == 
 -- entry: bench_newtoneq_batched
@@ -318,44 +318,45 @@ entry bench_newtoneq_batched [n] (Sigmas: [][n][n]f64) =
 -- n = 500, elapsed = 112454667.09 us
 
 entry barrier_bench [n] (Sigma: [n][n]f64) (mu: [n]f64) (esg_scores: [n]f64) =
-    let Sigma = linalg.matmul Sigma (transpose Sigma)
-    let mm = n + 2
-    let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
-    let g x = map (*2) (linalg.matvecmul_row Sigma x)
-    let h _ = map (map (*2)) Sigma
-    let x0 = map (/(f64.i64 n)) (replicate n 1)
-    let A = [replicate n 1]
-    let b = [1]
-    let fi x =
-        let expected_return = linalg.dotprod x mu
-        let expected_esg = linalg.dotprod x esg_scores
-        in ([         
-            0.07 - expected_return, 
-            0.08 - expected_esg             
-        ] ++ map (f64.neg) x) :> [mm]f64
-    let fi_grad _ =
-        let grad = linalg.matzeros mm n
-        let grad[0, :] = map (f64.neg) mu
-        let grad[1, :] = map (f64.neg) esg_scores
-        let grad[2:, :] = map (map (f64.neg)) (linalg.eye n)
-        in grad
-    let phi x = -(reduce (+) (0.0)  (map (f64.log <-< f64.neg) (fi x)))
-    let phi_grad x = 
-        let grad_log_fi = map (-1 /) (fi x)
-        in linalg.matvecmul_row (transpose (fi_grad x)) grad_log_fi
-    let phi_hess x = 
-        let fi_values = fi x 
-        let grad_fi_values = fi_grad x
-        in map (\i ->
-            map (\j ->
-                let a = map (\x -> (1 / x ** 2)) fi_values
-                let b = grad_fi_values[:, i]
-                let c = grad_fi_values[:, j] 
-                in map3 (\x y z -> x * y * z) a b c |> reduce (+) 0.0
-            ) (iota n)
-        ) (iota n)
-    in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 2 1e-10
-    
+  let Sigma = linalg.matmul Sigma (transpose Sigma)
+  let mm = n + 2
+  let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
+  let g x = map (* 2) (linalg.matvecmul_row Sigma x)
+  let h _ = map (map (* 2)) Sigma
+  let x0 = map (/ (f64.i64 n)) (replicate n 1)
+  let A = [replicate n 1]
+  let b = [1]
+  let fi x =
+    let expected_return = linalg.dotprod x mu
+    let expected_esg = linalg.dotprod x esg_scores
+    in ([ 0.07 - expected_return
+        , 0.08 - expected_esg
+        ]
+         ++ map (f64.neg) x)
+       :> [mm]f64
+  let fi_grad _ =
+    let grad = linalg.matzeros mm n
+    let grad[0, :] = map (f64.neg) mu
+    let grad[1, :] = map (f64.neg) esg_scores
+    let grad[2:, :] = map (map (f64.neg)) (linalg.eye n)
+    in grad
+  let phi x = -(reduce (+) (0.0) (map (f64.log <-< f64.neg) (fi x)))
+  let phi_grad x =
+    let grad_log_fi = map (-1 /) (fi x)
+    in linalg.matvecmul_row (transpose (fi_grad x)) grad_log_fi
+  let phi_hess x =
+    let fi_values = fi x
+    let grad_fi_values = fi_grad x
+    in map (\i ->
+               map (\j ->
+                       let a = map (\x -> (1 / x ** 2)) fi_values
+                       let b = grad_fi_values[:, i]
+                       let c = grad_fi_values[:, j]
+                       in map3 (\x y z -> x * y * z) a b c |> reduce (+) 0.0)
+                   (iota n))
+           (iota n)
+  in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 2 1e-10
+
 -- ==
 -- entry: barrier_bench
 -- input @ data/2x_100x100_1d_100_1d_100f64
@@ -365,25 +366,27 @@ entry barrier_bench [n] (Sigma: [n][n]f64) (mu: [n]f64) (esg_scores: [n]f64) =
 -- input @ data/2x_10000x10000_1d_10000_1d_10000f64
 
 entry barrier_bench_jvp [n] (Sigma: [n][n]f64) (mu: [n]f64) (esg_scores: [n]f64) =
-    let Sigma = linalg.matmul Sigma (transpose Sigma)
-    let mm = n + 2
-    let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
-    let g x = convex.grad_jvp f x
-    let h x = convex.hess_jvp f x
-    let x0 = map (/(f64.i64 n)) (replicate n 1)
-    let A = [replicate n 1]
-    let b = [1]
-    let fi x =
-        let expected_return = linalg.dotprod x mu
-        let expected_esg = linalg.dotprod x esg_scores
-        in ([         
-            0.07 - expected_return, 
-            0.08 - expected_esg             
-        ] ++ map (f64.neg) x) :> [mm]f64
-    let phi x = -(reduce (+) (0.0)  (map (f64.log <-< f64.neg) (fi x)))
-    let phi_grad x = convex.grad_jvp phi x
-    let phi_hess x = convex.hess_jvp phi x
-    in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 2 1e-10
+  let Sigma = linalg.matmul Sigma (transpose Sigma)
+  let mm = n + 2
+  let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
+  let g x = convex.grad_jvp f x
+  let h x = convex.hess_jvp f x
+  let x0 = map (/ (f64.i64 n)) (replicate n 1)
+  let A = [replicate n 1]
+  let b = [1]
+  let fi x =
+    let expected_return = linalg.dotprod x mu
+    let expected_esg = linalg.dotprod x esg_scores
+    in ([ 0.07 - expected_return
+        , 0.08 - expected_esg
+        ]
+         ++ map (f64.neg) x)
+       :> [mm]f64
+  let phi x = -(reduce (+) (0.0) (map (f64.log <-< f64.neg) (fi x)))
+  let phi_grad x = convex.grad_jvp phi x
+  let phi_hess x = convex.hess_jvp phi x
+  in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 2 1e-10
+
 -- ==
 -- entry: barrier_bench_jvp
 -- input @ data/2x_100x100_1d_100_1d_100f64
@@ -393,25 +396,27 @@ entry barrier_bench_jvp [n] (Sigma: [n][n]f64) (mu: [n]f64) (esg_scores: [n]f64)
 -- input @ data/2x_10000x10000_1d_10000_1d_10000f64
 
 entry barrier_bench_vjp [n] (Sigma: [n][n]f64) (mu: [n]f64) (esg_scores: [n]f64) =
-    let Sigma = linalg.matmul Sigma (transpose Sigma)
-    let mm = n + 2
-    let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
-    let g x = convex.grad_vjp f x
-    let h x = convex.hess_vjp f x
-    let x0 = map (/(f64.i64 n)) (replicate n 1)
-    let A = [replicate n 1]
-    let b = [1]
-    let fi x =
-        let expected_return = linalg.dotprod x mu
-        let expected_esg = linalg.dotprod x esg_scores
-        in ([         
-            0.07 - expected_return, 
-            0.08 - expected_esg             
-        ] ++ map (f64.neg) x) :> [mm]f64
-    let phi x = -(reduce (+) (0.0)  (map (f64.log <-< f64.neg) (fi x)))
-    let phi_grad x = convex.grad_vjp phi x
-    let phi_hess x = convex.hess_vjp phi x
-    in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 2 1e-10
+  let Sigma = linalg.matmul Sigma (transpose Sigma)
+  let mm = n + 2
+  let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
+  let g x = convex.grad_vjp f x
+  let h x = convex.hess_vjp f x
+  let x0 = map (/ (f64.i64 n)) (replicate n 1)
+  let A = [replicate n 1]
+  let b = [1]
+  let fi x =
+    let expected_return = linalg.dotprod x mu
+    let expected_esg = linalg.dotprod x esg_scores
+    in ([ 0.07 - expected_return
+        , 0.08 - expected_esg
+        ]
+         ++ map (f64.neg) x)
+       :> [mm]f64
+  let phi x = -(reduce (+) (0.0) (map (f64.log <-< f64.neg) (fi x)))
+  let phi_grad x = convex.grad_vjp phi x
+  let phi_hess x = convex.hess_vjp phi x
+  in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 2 1e-10
+
 -- ==
 -- entry: barrier_bench_vjp
 -- input @ data/2x_100x100_1d_100_1d_100f64
@@ -421,19 +426,20 @@ entry barrier_bench_vjp [n] (Sigma: [n][n]f64) (mu: [n]f64) (esg_scores: [n]f64)
 -- input @ data/2x_10000x10000_1d_10000_1d_10000f64
 
 entry admm_bench [n] (Sigma: [n][n]f64) (mu: [n]f64) (esg_scores: [n]f64) =
-    let ones = replicate n 1.0
-    let neg_ones = map (f64.neg) ones
-    let m = n + 4
-    let A = [mu, esg_scores, ones, neg_ones] ++ linalg.eye n :> [m][n]f64
-    let b =  [0.5, 0.65, 1, -1] ++ replicate n 0.0 :> [m]f64
-    let x_init = replicate n 0.0
-    let x_init[0] = 1.0
-    let rho = 0.15
-    let tol = 1e-10
-    let max_iter = 300
-    let g x = map (*2) (linalg.matvecmul_row Sigma x)
-    let h _ = map (map (*2)) Sigma
-    in convex.admm g h A b x_init rho tol max_iter
+  let ones = replicate n 1.0
+  let neg_ones = map (f64.neg) ones
+  let m = n + 4
+  let A = [mu, esg_scores, ones, neg_ones] ++ linalg.eye n :> [m][n]f64
+  let b = [0.5, 0.65, 1, -1] ++ replicate n 0.0 :> [m]f64
+  let x_init = replicate n 0.0
+  let x_init[0] = 1.0
+  let rho = 0.15
+  let tol = 1e-10
+  let max_iter = 300
+  let g x = map (* 2) (linalg.matvecmul_row Sigma x)
+  let h _ = map (map (* 2)) Sigma
+  in convex.admm g h A b x_init rho tol max_iter
+
 -- ==
 -- entry: admm_bench
 -- input @ data/2x_100x100_1d_100_1d_100f64
@@ -484,46 +490,49 @@ entry admm_bench [n] (Sigma: [n][n]f64) (mu: [n]f64) (esg_scores: [n]f64) =
 -- n = 1000, elapsed = 12988537.07 us
 
 entry barrier_bench_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_scoress: [][n]f64) =
-    let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
-    in map3 (\Sigma mu esg_scores -> 
-        let Sigma = linalg.matmul Sigma (transpose Sigma)
-        let mm = n + 2
-        let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
-        let g x = map (*2) (linalg.matvecmul_row Sigma x)
-        let h _ = map (map (*2)) Sigma
-        let x0 = map (/(f64.i64 n)) (replicate n 1)
-        let A = [replicate n 1]
-        let b = [1]
-        let fi x =
-            let expected_return = linalg.dotprod x mu
-            let expected_esg = linalg.dotprod x esg_scores
-            in ([         
-                0.07 - expected_return, 
-                0.08 - expected_esg             
-            ] ++ map (f64.neg) x) :> [mm]f64
-        let fi_grad _ =
-            let grad = linalg.matzeros mm n
-            let grad[0, :] = map (f64.neg) mu
-            let grad[1, :] = map (f64.neg) esg_scores
-            let grad[2:, :] = map (map (f64.neg)) (linalg.eye n)
-            in grad
-        let phi x = -(reduce (+) (0.0)  (map (f64.log <-< f64.neg) (fi x)))
-        let phi_grad x = 
-            let grad_log_fi = map (-1 /) (fi x)
-            in linalg.matvecmul_row (transpose (fi_grad x)) grad_log_fi
-        let phi_hess x = 
-            let fi_values = fi x 
-            let grad_fi_values = fi_grad x
-            in map (\i ->
-                map (\j ->
-                    let a = map (\x -> (1 / x ** 2)) fi_values
-                    let b = grad_fi_values[:, i]
-                    let c = grad_fi_values[:, j] 
-                    in map3 (\x y z -> x * y * z) a b c |> reduce (+) 0.0
-                ) (iota n)
-            ) (iota n)
-        in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 4 1e-8
-    ) Sigmas mus esg_scoress
+  let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
+  in map3 (\Sigma mu esg_scores ->
+              let Sigma = linalg.matmul Sigma (transpose Sigma)
+              let mm = n + 2
+              let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
+              let g x = map (* 2) (linalg.matvecmul_row Sigma x)
+              let h _ = map (map (* 2)) Sigma
+              let x0 = map (/ (f64.i64 n)) (replicate n 1)
+              let A = [replicate n 1]
+              let b = [1]
+              let fi x =
+                let expected_return = linalg.dotprod x mu
+                let expected_esg = linalg.dotprod x esg_scores
+                in ([ 0.07 - expected_return
+                    , 0.08 - expected_esg
+                    ]
+                     ++ map (f64.neg) x)
+                   :> [mm]f64
+              let fi_grad _ =
+                let grad = linalg.matzeros mm n
+                let grad[0, :] = map (f64.neg) mu
+                let grad[1, :] = map (f64.neg) esg_scores
+                let grad[2:, :] = map (map (f64.neg)) (linalg.eye n)
+                in grad
+              let phi x = -(reduce (+) (0.0) (map (f64.log <-< f64.neg) (fi x)))
+              let phi_grad x =
+                let grad_log_fi = map (-1 /) (fi x)
+                in linalg.matvecmul_row (transpose (fi_grad x)) grad_log_fi
+              let phi_hess x =
+                let fi_values = fi x
+                let grad_fi_values = fi_grad x
+                in map (\i ->
+                           map (\j ->
+                                   let a = map (\x -> (1 / x ** 2)) fi_values
+                                   let b = grad_fi_values[:, i]
+                                   let c = grad_fi_values[:, j]
+                                   in map3 (\x y z -> x * y * z) a b c |> reduce (+) 0.0)
+                               (iota n))
+                       (iota n)
+              in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 4 1e-8)
+          Sigmas
+          mus
+          esg_scoress
 
 -- == 
 -- entry: barrier_bench_batched
@@ -535,27 +544,30 @@ entry barrier_bench_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_score
 -- input @ data/2d_100x500x500f64_1d_100x500_1d_100x500f64
 
 entry barrier_bench_jvp_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_scoress: [][n]f64) =
-    let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
-    in map3 (\Sigma mu esg_scores -> 
-        let mm = n + 2
-        let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
-        let g x = convex.grad_jvp f x
-        let h x = convex.hess_jvp f x
-        let x0 = map (/(f64.i64 n)) (replicate n 1)
-        let A = [replicate n 1]
-        let b = [1]
-        let fi x =
-            let expected_return = linalg.dotprod x mu
-            let expected_esg = linalg.dotprod x esg_scores
-            in ([         
-                0.07 - expected_return, 
-                0.08 - expected_esg             
-            ] ++ map (f64.neg) x) :> [mm]f64
-        let phi x = -(reduce (+) (0.0)  (map (f64.log <-< f64.neg) (fi x)))
-        let phi_grad x = convex.grad_vjp phi x
-        let phi_hess x = convex.hess_vjp phi x
-        in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 4 1e-8
-    ) Sigmas mus esg_scoress
+  let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
+  in map3 (\Sigma mu esg_scores ->
+              let mm = n + 2
+              let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
+              let g x = convex.grad_jvp f x
+              let h x = convex.hess_jvp f x
+              let x0 = map (/ (f64.i64 n)) (replicate n 1)
+              let A = [replicate n 1]
+              let b = [1]
+              let fi x =
+                let expected_return = linalg.dotprod x mu
+                let expected_esg = linalg.dotprod x esg_scores
+                in ([ 0.07 - expected_return
+                    , 0.08 - expected_esg
+                    ]
+                     ++ map (f64.neg) x)
+                   :> [mm]f64
+              let phi x = -(reduce (+) (0.0) (map (f64.log <-< f64.neg) (fi x)))
+              let phi_grad x = convex.grad_vjp phi x
+              let phi_hess x = convex.hess_vjp phi x
+              in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 4 1e-8)
+          Sigmas
+          mus
+          esg_scoress
 
 -- == 
 -- entry: barrier_bench_jvp_batched
@@ -567,27 +579,30 @@ entry barrier_bench_jvp_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_s
 -- input @ data/2d_100x500x500f64_1d_100x500_1d_100x500f64
 
 entry barrier_bench_vjp_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_scoress: [][n]f64) =
-    let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
-    in map3 (\Sigma mu esg_scores -> 
-        let mm = n + 2
-        let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
-        let g x = convex.grad_vjp f x
-        let h x = convex.hess_vjp f x
-        let x0 = map (/(f64.i64 n)) (replicate n 1)
-        let A = [replicate n 1]
-        let b = [1]
-        let fi x =
-            let expected_return = linalg.dotprod x mu
-            let expected_esg = linalg.dotprod x esg_scores
-            in ([         
-                0.07 - expected_return, 
-                0.08 - expected_esg             
-            ] ++ map (f64.neg) x) :> [mm]f64
-        let phi x = -(reduce (+) (0.0)  (map (f64.log <-< f64.neg) (fi x)))
-        let phi_grad x = convex.grad_vjp phi x
-        let phi_hess x = convex.hess_vjp phi x
-        in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 4 1e-8
-    ) Sigmas mus esg_scoress
+  let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
+  in map3 (\Sigma mu esg_scores ->
+              let mm = n + 2
+              let f x = linalg.dotprod x (linalg.matvecmul_row Sigma x)
+              let g x = convex.grad_vjp f x
+              let h x = convex.hess_vjp f x
+              let x0 = map (/ (f64.i64 n)) (replicate n 1)
+              let A = [replicate n 1]
+              let b = [1]
+              let fi x =
+                let expected_return = linalg.dotprod x mu
+                let expected_esg = linalg.dotprod x esg_scores
+                in ([ 0.07 - expected_return
+                    , 0.08 - expected_esg
+                    ]
+                     ++ map (f64.neg) x)
+                   :> [mm]f64
+              let phi x = -(reduce (+) (0.0) (map (f64.log <-< f64.neg) (fi x)))
+              let phi_grad x = convex.grad_vjp phi x
+              let phi_hess x = convex.hess_vjp phi x
+              in convex.barrier_method f g h phi phi_grad phi_hess mm A b x0 1 4 1e-8)
+          Sigmas
+          mus
+          esg_scoress
 
 -- == 
 -- entry: barrier_bench_vjp_batched
@@ -599,22 +614,24 @@ entry barrier_bench_vjp_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_s
 -- input @ data/2d_100x500x500f64_1d_100x500_1d_100x500f64
 
 entry admm_bench_batched [n] (Sigmas: [][n][n]f64) (mus: [][n]f64) (esg_scoress: [][n]f64) =
-    let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
-    in map3 (\Sigma mu esg_scores -> 
-        let ones = replicate n 1.0
-        let neg_ones = map (f64.neg) ones
-        let m = n + 4
-        let A = [mu, esg_scores, ones, neg_ones] ++ linalg.eye n :> [m][n]f64
-        let b =  [0.5, 0.65, 1, -1] ++ replicate n 0.0 :> [m]f64
-        let x_init = replicate n 0.0
-        let x_init[0] = 1.0
-        let rho = 0.15
-        let tol = 1e-10
-        let max_iter = 300
-        let g x = map (*2) (linalg.matvecmul_row Sigma x)
-        let h _ = map (map (*2)) Sigma
-        in convex.admm g h A b x_init rho tol max_iter
-    ) Sigmas mus esg_scoress
+  let Sigmas = map (\Sigma -> linalg.matmul Sigma (transpose Sigma)) Sigmas
+  in map3 (\Sigma mu esg_scores ->
+              let ones = replicate n 1.0
+              let neg_ones = map (f64.neg) ones
+              let m = n + 4
+              let A = [mu, esg_scores, ones, neg_ones] ++ linalg.eye n :> [m][n]f64
+              let b = [0.5, 0.65, 1, -1] ++ replicate n 0.0 :> [m]f64
+              let x_init = replicate n 0.0
+              let x_init[0] = 1.0
+              let rho = 0.15
+              let tol = 1e-10
+              let max_iter = 300
+              let g x = map (* 2) (linalg.matvecmul_row Sigma x)
+              let h _ = map (map (* 2)) Sigma
+              in convex.admm g h A b x_init rho tol max_iter)
+          Sigmas
+          mus
+          esg_scoress
 
 -- == 
 -- entry: admm_bench_batched
